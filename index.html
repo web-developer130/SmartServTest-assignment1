@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+          }
+          
+          th, td {
+            text-align: left;
+            padding: 8px;
+          }
+          
+          tr:nth-child(even) {background-color: #928b8b;}
+          </style>
+    </head>
+    <body>
+        <h1>Amazonaws Json Data</h1>
+        <table>
+            <tr>
+                <th>SUBCATEGORY</th>
+                <th>TITLE</th>
+                <th>PRICE</th>
+                <th>POPULARITY</th>
+            </tr>
+            <tbody id="tBody"></tbody>
+        </table>
+        <script type="text/javascript">
+            const a_url="https://s3.amazonaws.com/open-to-cors/assignment.json";
+        fetch(a_url)
+        .then(function(response){
+  return response.json();
+        })
+        .then(function(products){
+           var array=Object.values(products);
+        //    console.log('Products : ',products)
+            
+            var prod = Object.values(array[1]);
+            var sortedProd = prod.sort(function(x,y){
+                return y.popularity-x.popularity;
+            })
+            for( var i=0;i<prod.length;i++)
+            console.log(prod[i])
+            buildTable(sortedProd);
+        })
+        .catch(function(err){
+console.log(err);
+        })
+
+        function buildTable(data)
+        {
+            for(var i=0;i<data.length;i++)
+            {
+                var row = `
+            <tr>
+                <td>${data[i].subcategory}</td>
+                <td>${data[i].title}</td>
+                <td>${data[i].price}</td>
+                <td>${data[i].popularity}</td>
+            </tr>
+            `     
+            document.getElementById("tBody").innerHTML+=row;
+            }
+            
+        }
+        </script>
+
+    </body>
+</html>
